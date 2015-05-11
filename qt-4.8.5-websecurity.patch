@@ -1,0 +1,47 @@
+diff -rupN qt-4.8.5-original/src/3rdparty/webkit/Source/WebCore/loader/FrameLoader.cpp qt-4.8.5-pached/src/3rdparty/webkit/Source/WebCore/loader/FrameLoader.cpp
+--- qt-4.8.5-original/src/3rdparty/webkit/Source/WebCore/loader/FrameLoader.cpp	2013-06-07 08:16:57.000000000 +0300
++++ qt-4.8.5-pached/src/3rdparty/webkit/Source/WebCore/loader/FrameLoader.cpp	2015-05-11 19:13:49.047144610 +0300
+@@ -3193,6 +3193,10 @@ void FrameLoader::applyUserAgent(Resourc
+ 
+ bool FrameLoader::shouldInterruptLoadForXFrameOptions(const String& content, const KURL& url)
+ {
++    Settings* settings = m_frame->document()->settings();
++    if (settings == NULL || settings->isWebSecurityEnabled() == false)
++    	return false;
++
+     Frame* topFrame = m_frame->tree()->top();
+     if (m_frame == topFrame)
+         return false;
+diff -rupN qt-4.8.5-original/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebsettings.cpp qt-4.8.5-pached/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebsettings.cpp
+--- qt-4.8.5-original/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebsettings.cpp	2013-06-07 08:16:58.000000000 +0300
++++ qt-4.8.5-pached/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebsettings.cpp	2015-05-11 19:11:48.090324309 +0300
+@@ -173,6 +173,7 @@ void QWebSettingsPrivate::apply()
+                                       global->attributes.value(QWebSettings::AcceleratedCompositingEnabled));
+ 
+         settings->setAcceleratedCompositingEnabled(value);
++	
+ #endif
+ #if ENABLE(WEBGL)
+         value = attributes.value(QWebSettings::WebGLEnabled,
+@@ -273,6 +274,10 @@ void QWebSettingsPrivate::apply()
+         settings->setNeedsSiteSpecificQuirks(value);
+ 
+         settings->setUsesPageCache(WebCore::pageCache()->capacity());
++	
++	value = attributes.value(QWebSettings::WebSecurityEnabled,
++		global->attributes.value(QWebSettings::WebSecurityEnabled));
++	settings->setWebSecurityEnabled(value);
+ 
+ #if ENABLE(PASSWORD_ECHO)
+         settings->setPasswordEchoEnabled(true);
+diff -rupN qt-4.8.5-original/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebsettings.h qt-4.8.5-pached/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebsettings.h
+--- qt-4.8.5-original/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebsettings.h	2013-06-07 08:16:58.000000000 +0300
++++ qt-4.8.5-pached/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebsettings.h	2015-05-11 19:09:01.984307037 +0300
+@@ -77,6 +77,7 @@ public:
+         SiteSpecificQuirksEnabled,
+         JavascriptCanCloseWindows,
+         WebGLEnabled,
++	WebSecurityEnabled,
+         HyperlinkAuditingEnabled
+     };
+     enum WebGraphic {
