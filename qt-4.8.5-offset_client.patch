@@ -1,0 +1,90 @@
+diff -crB qt-4.8.5-original/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebelement.cpp qt-4.8.5-offset/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebelement.cpp
+*** qt-4.8.5-original/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebelement.cpp	2013-06-07 08:16:58.000000000 +0300
+--- qt-4.8.5-offset/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebelement.cpp	2015-05-18 21:08:39.242080196 +0300
+***************
+*** 1528,1533 ****
+--- 1528,1590 ----
+      context.restore();
+  }
+  
++ int QWebElement::offsetLeft()
++ {
++         if (!m_element)
++                 return 0;
++         return m_element->offsetLeft();
++ }
++ 
++ int QWebElement::offsetTop()
++ {
++         if (!m_element)
++                 return 0;
++         return m_element->offsetTop();
++ }
++ 
++ int QWebElement::offsetWidth()
++ {
++         if (!m_element)
++                 return 0;
++         return m_element->offsetWidth();
++ }
++ 
++ int QWebElement::offsetHeight()
++ {
++         if (!m_element)
++                 return 0;
++         return m_element->offsetHeight();
++ }
++ 
++ int QWebElement::clientLeft()
++ {
++         if (!m_element)
++                 return 0;
++         return m_element->clientLeft();
++ }
++ 
++ int QWebElement::clientTop()
++ {
++         if (!m_element)
++                 return 0;
++         return m_element->clientTop();
++ }
++ 
++ int QWebElement::clientWidth()
++ {
++         if (!m_element)
++                 return 0;
++         return m_element->clientWidth();
++ }
++ 
++ int QWebElement::clientHeight()
++ {
++         if (!m_element)
++                 return 0;
++         return m_element->clientHeight();
++ }
++ 
++ 
+  class QWebElementCollectionPrivate : public QSharedData
+  {
+  public:
+diff -crB qt-4.8.5-original/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebelement.h qt-4.8.5-offset/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebelement.h
+*** qt-4.8.5-original/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebelement.h	2013-06-07 08:16:58.000000000 +0300
+--- qt-4.8.5-offset/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebelement.h	2015-05-18 21:07:37.947955100 +0300
+***************
+*** 158,163 ****
+--- 158,172 ----
+      void render(QPainter* painter);
+      void render(QPainter* painter, const QRect& clipRect);
+  
++     int offsetLeft();
++     int offsetTop();
++     int offsetWidth();
++     int offsetHeight();
++     int clientLeft();
++     int clientTop();
++     int clientWidth();
++     int clientHeight();
++ 
+  private:
+      explicit QWebElement(WebCore::Element*);
+      explicit QWebElement(WebCore::Node*);
